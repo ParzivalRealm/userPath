@@ -6,63 +6,65 @@ import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
 import StepThree from "./StepThree";
 import Footer from "./Footer";
+import StepFour from "./StepFour";
 
 function CreateUserForm({ currentStep, setCurrentStep }) {
-  const [formData, setFormData] = useState({
-    userType: "",
-    profesionalRole: "",
-    skills: [],
-    process: [],
-  });
+  const [userType, setUserType] = useState("");
+  const [profesionalRole, setProfesionalRole] = useState("");
+  const [skills, setSkills] = useState([]);
+  const [process, setProcess] = useState([]);
   const [isDisabled, setIsDisabled] = useState(true);
-  const handleUserTypeSelect = (userType) => {
-    setFormData({ ...formData, userType });
-  };
-  const handleProfesionalRoleSelect = (profesionalRole) => {
-    setFormData({ ...formData, profesionalRole });
-  };
-  const handleSkillsSelect = (skills) => {
-    setFormData({ ...formData, skills });
-  };
-  const handleProcessSelect = (process) => {
-    setFormData({ ...formData, process });
-  };
+
   const handleSubmit = () => {
+    const formData = { userType, profesionalRole, skills, process };
     console.log(formData);
   };
+
   const handleNextStep = () => {
-    setCurrentStep(currentStep + 1);
+    const step = currentStep;
+    setCurrentStep(step + 1);
     setIsDisabled(true);
+    console.log("next step from handleNextStep", currentStep);
   };
+
   const handlePreviousStep = () => {
-    setCurrentStep(currentStep - 1);
+    const step = currentStep;
+    setCurrentStep(step - 1);
     setIsDisabled(true);
   };
 
   const renderStep = () => {
+    console.log(currentStep);
     switch (currentStep) {
       case 1:
         return (
           <StepOne
-            onSelectUserType={handleUserTypeSelect}
+            onSelectUserType={setUserType}
             setIsDisabled={setIsDisabled}
           />
         );
       case 2:
         return (
           <StepTwo
-            userType={formData.userType}
-            onSelectProfesionalRole={handleProfesionalRoleSelect}
+            onSelectProfesionalRole={setProfesionalRole}
             setIsDisabled={setIsDisabled}
           />
         );
       case 3:
         return (
           <StepThree
-            userType={formData.userType}
-            profesionalRole={formData.profesionalRole}
-            onSelectSkills={handleSkillsSelect}
+            profesionalRole={profesionalRole}
+            onSelectSkills={setSkills}
             setIsDisabled={setIsDisabled}
+          />
+        );
+      case 4:
+        return (
+          <StepFour
+            skills={skills} // Pass the selected skills to StepFour
+            onSelectProcess={setProcess}
+            setIsDisabled={setIsDisabled}
+            profesionalRole={profesionalRole}
           />
         );
       // ... cases for other steps
@@ -71,7 +73,6 @@ function CreateUserForm({ currentStep, setCurrentStep }) {
     }
   };
 
-  console.log(currentStep);
   return (
     <div>
       <StepController currentStep={currentStep} maxCount={4} />
